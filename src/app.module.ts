@@ -1,34 +1,30 @@
 import { Module } from '@nestjs/common';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './constrollers/products.controller';
-import { CategoriesController } from './constrollers/categories.controller';
-import { CustomerController } from './constrollers/customer.controller';
-import { UserController } from './constrollers/user.controller';
-import { BrandController } from './constrollers/brand.controller';
-import { ProductsService } from './services/products.service';
-import { CustomerService } from './services/customer.service';
-import { UserService } from './services/user.service';
-import { CategoriesService } from './services/categories.service';
-import { BrandService } from './services/brand.service';
+import { UsersModule } from './users/users.module';
+import { ProductsModule } from './products/products.module';
+import { async } from 'rxjs';
+import { DatabaseModule } from './database/database.module';
+
+const API_KEY = '12345634';
+const API_KEY_PROD = 'PROD12345634';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    ProductsController,
-    CategoriesController,
-    CustomerController,
-    UserController,
-    BrandController,
-  ],
+  imports: [HttpModule, UsersModule, ProductsModule, DatabaseModule],
+  controllers: [AppController],
   providers: [
     AppService,
-    ProductsService,
-    CustomerService,
-    UserService,
-    CategoriesService,
-    BrandService,
+    {
+      provide: 'TASK',
+      useFactory: async (http: HttpService) => {
+        const taks = await http
+          .get('https://jsonplaceholder.typicode.com/users/1/todos')
+          .toPromise();
+        return taks.data;
+      },
+      inject: [HttpService],
+    },
   ],
 })
 export class AppModule {}

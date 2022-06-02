@@ -22,14 +22,14 @@ export class ProductsService {
 
   findOne(id: number) {
     const product = this.products.find((item) => item.id === id);
-    if(!product) {
+    if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
     return product;
   }
 
   create(payload: CreateProductDto) {
-    console.log(payload)
+    console.log(payload);
     this.counterId = this.counterId + 1;
     const newProduct = {
       id: this.counterId,
