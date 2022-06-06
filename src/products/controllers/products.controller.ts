@@ -12,13 +12,18 @@ import {
   //ParseIntPipe,
 } from '@nestjs/common';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { ProductsService } from './../services/products.service';
-import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from './../dtos/products.dto';
+
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private productService: ProductsService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get a list products' })
   getProducts(
     @Query('limit') limit = 100,
     @Query('offset') offset = 0,

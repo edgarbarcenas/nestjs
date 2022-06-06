@@ -1,17 +1,33 @@
 import { Module } from '@nestjs/common';
 import { HttpModule, HttpService } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
+import * as joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
-import { async } from 'rxjs';
 import { DatabaseModule } from './database/database.module';
-
-const API_KEY = '12345634';
-const API_KEY_PROD = 'PROD12345634';
+import { enviroments } from './enviroments';
+import config from './config';
 
 @Module({
-  imports: [HttpModule, UsersModule, ProductsModule, DatabaseModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      isGlobal: true,
+      load: [config],
+      validationSchema: joi.object({
+        API_KEY: joi.number().required(),
+        DATABASE_NAME: joi.string().required(),
+        PORT: joi.number().required(),
+      }),
+    }),
+    HttpModule,
+    UsersModule,
+    ProductsModule,
+    DatabaseModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
