@@ -9,7 +9,6 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
-  //ParseIntPipe,
 } from '@nestjs/common';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
