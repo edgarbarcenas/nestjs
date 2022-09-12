@@ -14,6 +14,6 @@ export const connectionSource = new DataSource({
   database: configService.get('POSTGRES_DB'),
   logging: true,
   synchronize: false,
-  entities: [configService.get('TYPEORM_ENTITIES')],
-  migrations: [configService.get('TYPEORM_MIGRATIONS_DIR')],
+  entities: ['src/*/*/*.entity.ts'],
+  migrations: ['src/database/migrations/*.ts'],
 });
