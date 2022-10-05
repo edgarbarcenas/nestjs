@@ -1,4 +1,15 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
+import { Order } from './order.entity';
+
+import { User } from './user.entity';
 
 @Entity('customers')
 export class Customer {
@@ -13,4 +24,23 @@ export class Customer {
 
   @Column({ type: 'varchar', length: 20 })
   phone: string;
+
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+  })
+  updatedAt: Date;
+
+  @OneToOne(() => User, (user) => user.customer)
+  user: User;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
 }
